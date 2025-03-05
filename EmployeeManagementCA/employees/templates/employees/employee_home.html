@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Home</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            position: relative;
+        }
+        .clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: auto;
+            height: 250px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #333;
+            font-size: 22px;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ccc;
+            color: black;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .back-btn:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Employee Home Box -->
+        <div class="box">
+            <!-- Back Button (Top Left) -->
+            <a href="javascript:window.history.back();" class="back-btn">← Back</a>
+            
+            <!-- Logout Button (Top Right) -->
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            
+            <!-- Live Clock -->
+            <div class="clock" id="clock">00:00:00</div>
+
+            <!-- Optional Company Logo -->
+            <img src="{% static 'images/logo.jpg' %}" alt="Company Logo" class="logo">
+            
+            <!-- Welcome Message -->
+            <h2>Welcome, {{ employee.name }}!</h2>
+        </div>
+    </div>
+
+    <script>
+        // Live clock function
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        
+        setInterval(updateClock, 1000); // Update every second
+        updateClock(); // Initial call
+    </script>
+</body>
+</html>

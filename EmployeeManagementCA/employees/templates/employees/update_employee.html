@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            gap: 20px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 350px;
+        }
+        .left-box {
+            width: 250px;
+            height: 320px;
+            text-align: center;
+        }
+        .logo {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+        }
+        .right-box {
+            width: 350px;
+            height: 320px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        input {
+            font-size: 16px;
+            text-align: center;
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        .checkbox-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .checkbox-container label{
+            margin-top: -5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 10px;
+        }
+        .button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            width: 70%;
+        }
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        .cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+            width: 28%;
+        }
+        .cancel-btn:hover {
+            background-color: #c0392b;
+        }
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #f4f4f4;
+            color: black;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .back-btn:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="javascript:window.history.back();" class="back-btn">← Back</a>
+    <div class="wrapper">
+        <!-- Left Side: Logo -->
+        <div class="box left-box">
+            <img src="{% static 'images/logo.jpg' %}" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Right Side: Update Employee Form -->
+        <div class="box right-box">
+            <h2>Update Employee</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="name" value="{{ employee.name }}" required>
+                <input type="text" name="passcode" value="{{ employee.passcode }}" required>
+
+                <!-- Manager Checkbox (inline with text) -->
+                <div class="checkbox-container">
+                    <input type="checkbox" id="is_manager" name="is_manager" {% if employee.is_manager %}checked{% endif %}>
+                    <label for="is_manager">Manager?</label>
+                </div>
+
+                <!-- Buttons Container -->
+                <div class="button-container">
+                    <button type="submit" class="button submit-btn">Update Employee</button>
+                    <a href="{% url 'manager_dashboard' %}" class="button cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            gap: 20px;
+            position: relative;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-box {
+            width: 250px;
+            height: 400px;
+            text-align: center;
+        }
+        .clock {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+        }
+        .right-box {
+            width: 500px;
+            height: 400px;
+            text-align: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: lightgray;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .button {
+            padding: 8px;
+            margin: 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+        .edit-btn:hover {
+            background-color: #d68910;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        .add-btn {
+            background-color: #2ecc71;
+            color: white;
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+        }
+        .add-btn:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Left Side: Clock & Logo -->
+        <div class="box left-box">
+            <div class="clock" id="clock">00:00:00</div>
+            <img src="{% static 'images/logo.jpg' %}" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Right Side: Employee List & Logout Button -->
+        <div class="box right-box">
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            <h2>Manager Dashboard</h2>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.employee_id }}</td>
+                        <td>{{ employee.name }}</td>
+                        <td>
+                            <a href="{% url 'update_employee' employee.employee_id %}" class="button edit-btn">Edit</a>
+                            <a href="{% url 'delete_employee' employee.employee_id %}" class="button delete-btn">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <a href="{% url 'add_employee' %}" class="button add-btn">Add Employee</a>
+        </div>
+    </div>
+
+    <script>
+        // Live clock function
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        
+        setInterval(updateClock, 1000); // Update every second
+        updateClock(); // Initial call
+    </script>
+</body>
+</html>
