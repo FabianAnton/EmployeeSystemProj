@@ -157,6 +157,34 @@
             let seconds = now.getSeconds().toString().padStart(2, '0');
             document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
         }
+
+        let activeInput = null;
+
+        // Set the clicked input field as active
+        function setActiveInput(inputId) {
+            activeInput = document.getElementById(inputId);
+        }
+
+        // Add numbers to whichever input field is active
+        function addNumber(num) {
+            if (activeInput) {
+                activeInput.value += num;
+            }
+        }
+
+        // Clear the currently selected input field
+        function clearInput() {
+            if (activeInput) {
+                activeInput.value = '';
+            }
+        }
+
+        // Delete the last character from the active input field
+        function deleteLast() {
+            if (activeInput && activeInput.value.length > 0) {
+                activeInput.value = activeInput.value.slice(0, -1);
+            }
+        }
         
         setInterval(updateClock, 1000); // Update every second
         updateClock(); // Initial call
