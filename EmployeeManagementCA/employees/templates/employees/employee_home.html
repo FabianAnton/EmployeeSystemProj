@@ -74,6 +74,50 @@
         .back-btn:hover {
             background-color: #bbb;
         }
+        /* General button styles */
+        .clock-btn {
+            flex: 1; /* Ensures both buttons are equal size */
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            background-color: #f4f4f4;
+            transition: background-color 0.2s ease-in-out;
+            width: 100%; /* Ensure buttons take full width */
+        }
+
+        .clock-btn:hover {
+            background-color: #ddd;
+        }
+
+        /* Center the entire button container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 280px;
+            margin: 20px auto;
+        }
+
+        /* Center the row of Break & Clock Out buttons */
+        .button-row {
+            display: flex;
+            justify-content: center; /* Ensures buttons stay centered */
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        /* Ensures forms take up equal space */
+        .button-row form {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -94,6 +138,37 @@
             
             <!-- Welcome Message -->
             <h2>Welcome, {{ employee.name }}!</h2>
+
+            <!-- Clock In/Clock Out Form -->
+            <div class="button-container">
+                {% if not attendance or not attendance.clock_in_time %}
+                    <form method="post" action="{% url 'clock_in' employee.employee_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="clock-btn">Clock In</button>
+                    </form>
+                {% elif attendance.clock_in_time and not attendance.clock_out_time %}
+                    <div class="button-row">
+                        {% if not attendance.break_start_time %}
+                            <form method="post" action="{% url 'start_break' employee.employee_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="clock-btn">Start Break</button>
+                            </form>
+                        {% elif attendance.break_start_time and not attendance.break_end_time %}
+                            <form method="post" action="{% url 'end_break' employee.employee_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="clock-btn">End Break</button>
+                            </form>
+                        {% endif %}
+            
+                        <form method="post" action="{% url 'clock_out' employee.employee_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="clock-btn">Clock Out</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <p style="color: green; font-weight: bold;">You have clocked out for today.</p>
+                {% endif %}
+            </div>                              
         </div>
     </div>
 

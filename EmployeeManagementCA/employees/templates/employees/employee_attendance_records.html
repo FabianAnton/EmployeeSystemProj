@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records - {{ employee.name }}</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 1150px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Enables scrolling only when needed */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed; /* Ensures columns fit properly */
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #777;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .back-btn:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Attendance Records for {{ employee.name }}</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Clock In</th>
+                    <th>Break Start</th>
+                    <th>Break End</th>
+                    <th>Clock Out</th>
+                </tr>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.clock_in_time|default:"-" }}</td>
+                    <td>{{ record.break_start_time|default:"-" }}</td>
+                    <td>{{ record.break_end_time|default:"-" }}</td>
+                    <td>{{ record.clock_out_time|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No records found</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <a href="{% url 'manager_dashboard' %}" class="back-btn">Back to Dashboard</a>
+    </div>
+</body>
+</html>
