@@ -20,6 +20,8 @@ class Employee(AbstractBaseUser):
     name = models.CharField(max_length=100)
     passcode = models.CharField(max_length=6)
     is_manager = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
+    archive_date = models.DateTimeField(null=True, blank=True)
 
     objects = EmployeeManager()
 
@@ -27,4 +29,4 @@ class Employee(AbstractBaseUser):
     REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.name} {'(Archived)' if self.archived else ''}"

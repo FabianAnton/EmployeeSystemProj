@@ -136,6 +136,21 @@
         .hidden {
             display: none;
         }
+        .archive-view-btn {
+            background-color: #95a5a6;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .archive-view-btn:hover {
+            background-color: #7f8c8d;
+        }
     </style>
     <script>
         function showAttendance() {
@@ -177,19 +192,22 @@
                         <th>Actions</th>
                     </tr>
                     {% for employee in employees %}
-                    <tr>
-                        <td>{{ employee.employee_id }}</td>
-                        <td>{{ employee.name }}</td>
-                        <td>
-                            <a href="{% url 'update_employee' employee.employee_id %}" class="button edit-btn">Edit</a>
-                            <a href="{% url 'delete_employee' employee.employee_id %}" class="button delete-btn">Delete</a>
-                            <a href="{% url 'employee_attendance_records' employee.employee_id %}" class="button view-btn">View Attendance</a>
-                        </td>
-                    </tr>
+                        {% if not employee.archived %}
+                        <tr>
+                            <td>{{ employee.employee_id }}</td>
+                            <td>{{ employee.name }}</td>
+                            <td>
+                                <a href="{% url 'update_employee' employee.employee_id %}" class="button edit-btn">Edit</a>
+                                <a href="{% url 'archive_employee' employee.employee_id %}" class="button delete-btn">Delete</a>
+                                <a href="{% url 'employee_attendance_records' employee.employee_id %}" class="button view-btn">View Attendance</a>
+                            </td>
+                        </tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </div>
             <a href="{% url 'add_employee' %}" class="button add-btn">Add Employee</a>
+            <a href="{% url 'archived_employees' %}" class="button archive-view-btn">View Archived Employees</a>
         </div>
     </div>
 
