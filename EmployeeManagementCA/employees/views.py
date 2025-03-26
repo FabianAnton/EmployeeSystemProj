@@ -21,7 +21,7 @@ def login_view(request):
     return render(request, 'employees/login.html')
 
 def manager_dashboard(request):
-    employees = Employee.objects.all()
+    employees = Employee.objects.filter(archived=False)
     return render(request, 'employees/manager_dashboard.html', {'employees': employees})
 
 def add_employee(request):
@@ -49,6 +49,18 @@ def update_employee(request, employee_id):
         return redirect('manager_dashboard')
 
     return render(request, 'employees/update_employee.html', {'employee': employee})
+
+def archive_employee(request, employee_id):
+    employee = get_object_or_404(Employee, employee_id=employee_id)
+    employee.archived = True
+    employee.archive_date = now()  # Store the archive timestamp
+    employee.save()
+    return redirect('manager_dashboard')
+
+def view_archived_employees(request):
+    """Displays a list of archived employees"""
+    archived_employees = Employee.objects.filter(archived=True)
+    return render(request, 'archived_employees.html', {'archived_employees': archived_employees})
 
 # Delete Employee
 def delete_employee(request, employee_id):

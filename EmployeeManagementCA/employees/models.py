@@ -27,8 +27,9 @@ class Employee(AbstractBaseUser):
     employee_id = models.CharField(max_length=6, unique=True)
     name = models.CharField(max_length=100)
     passcode = models.CharField(max_length=6)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE,related_name='employees',null=False,default=1)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,related_name='employees',null=False,default="")
     is_manager = models.BooleanField(default=False)
+    
    
 
     objects = EmployeeManager()
