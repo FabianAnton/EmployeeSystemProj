@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
-from .models import Employee
+from .models import Employee, Department
 
 def login_view(request):
     if request.method == 'POST':
@@ -63,3 +63,8 @@ def employee_home(request, employee_id):
 def logout_view(request):
     logout(request)
     return redirect('login')  # Redirects to the login page after logout
+
+#department view
+def department_list(request):
+    departments = Department.objects.prefetch_related('employees').all()
+    return render(request, 'departments.html', {'departments': departments})  
