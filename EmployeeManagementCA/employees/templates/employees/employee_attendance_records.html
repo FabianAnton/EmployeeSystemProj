@@ -21,7 +21,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 90%;
+            width: 70%;
             max-width: 1150px;
             height: 90vh;
             overflow-y: auto;
@@ -77,18 +77,20 @@
                     <th>Break Start</th>
                     <th>Break End</th>
                     <th>Clock Out</th>
+                    <th>Total Hours</th>
                 </tr>
                 {% for record in records %}
                 <tr>
-                    <td>{{ record.date }}</td>
-                    <td>{{ record.clock_in_time|default:"-" }}</td>
-                    <td>{{ record.break_start_time|default:"-" }}</td>
-                    <td>{{ record.break_end_time|default:"-" }}</td>
-                    <td>{{ record.clock_out_time|default:"-" }}</td>
+                    <td>{{ record.date|date:"F j, Y" }}</td>
+                    <td>{{ record.clock_in_time|date:"H:i" }}</td>
+                    <td>{{ record.break_start_time|date:"H:i" }}</td>
+                    <td>{{ record.break_end_time|date:"H:i" }}</td>
+                    <td>{{ record.clock_out_time|date:"H:i" }}</td>
+                    <td>{{ record.total_hours|default:"-" }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5">No records found</td>
+                    <td colspan="6">No records found</td>
                 </tr>
                 {% endfor %}
             </table>

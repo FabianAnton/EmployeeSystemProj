@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 from employees.models import Employee
+from datetime import timedelta
 
 class Attendance(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -20,3 +21,15 @@ class Attendance(models.Model):
     def is_clocked_in(self):
         """Check if employee has clocked in but not out yet."""
         return self.clock_in_time is not None and self.clock_out_time is None
+
+    def total_hours(self):
+        if self.clock_in_time and self.clock_out_time:
+            total = self.clock_out_time - self.clock_in_time
+            break_duration = timedelta()
+            if self.break_start_time and self.break_end_time:
+                break_duration = self.break_end_time - self.break_start_time
+            worked = total - break_duration
+            total_minutes = int(worked.total_seconds() // 60)
+            hours, minutes = divmod(total_minutes, 60)
+            return f"{hours:02d}:{minutes:02d}"
+        return None

@@ -138,14 +138,14 @@
             
         <body>
             <h1>Departments</h1>
-{% for department in departments %}
-    <h2>{{ department.Department_name }}</h2>
-    <ul>
-        {% for employee in department.employees.all %}
-            <li>{{ employee.name }}</li>
-        {% endfor %}
-    </ul>
-{% endfor %}
+            {% for department in departments %}
+                <h2>{{ department.Department_name }}</h2>
+                <ul>
+                    {% for employee in department.employees.all %}
+                        <li>{{ employee.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
             <script>
                 // Live clock function
                 function updateClock() {
