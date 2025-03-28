@@ -30,12 +30,15 @@ def add_employee(request):
         name = request.POST['name']
         passcode = request.POST['passcode']
         is_manager = 'is_manager' in request.POST
+        department_id = request.POST.get('department')
+        department = Department.objects.get(id=department_id) 
 
-        Employee.objects.create_employee(employee_id, name, passcode, is_manager)
+        Employee.objects.create_employee(employee_id, name, passcode, is_manager, department)
         
         return redirect('manager_dashboard')
 
     return render(request, 'employees/add_employee.html')
+
 
 # Update Employee
 def update_employee(request, employee_id):
