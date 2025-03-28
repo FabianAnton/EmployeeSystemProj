@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from .models import Employee, Department
+from django.utils.timezone import now 
 
 def login_view(request):
     if request.method == 'POST':
