@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Departments</title>
+    <title>Employee details</title>
     {% load static %}
     <style>
         body {
@@ -121,46 +121,5 @@
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Employee Home Box -->
-        <div class="box">
-            <!-- Back Button (Top Left) -->
-            <a href="javascript:window.history.back();" class="back-btn">← Back</a>
-            
-            <!-- Logout Button (Top Right) -->
-            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
-            
-            <!-- Live Clock -->
-            <div class="clock" id="clock">00:00:00</div>
-
-            <!-- Optional Company Logo -->
-            <img src="{% static 'images/logo.jpg' %}" alt="Company Logo" class="logo">
-       <body>
-        <a href="{% url 'filter_search' %}" class="button archive-view-btn">search for a employee </a>
-       </body>     
-        <body>
-            <h1>Departments</h1>
-            {% for department in departments %}
-                <h2>{{ department.Department_name }}</h2>
-                <ul>
-                    {% for employee in department.employees.all %}
-                        <ul>{{ employee.name }}</ul>
-                    {% endfor %}
-                </ul>
-            {% endfor %}
-            <script>
-                // Live clock function
-                function updateClock() {
-                    const now = new Date();
-                    let hours = now.getHours().toString().padStart(2, '0');
-                    let minutes = now.getMinutes().toString().padStart(2, '0');
-                    let seconds = now.getSeconds().toString().padStart(2, '0');
-                    document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
-                }
-                
-                setInterval(updateClock, 1000); // Update every second
-                updateClock(); // Initial call
-            </script>
-        </body>
-        </html>
-        
+    
+</body>

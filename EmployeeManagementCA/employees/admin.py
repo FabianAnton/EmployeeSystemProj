@@ -8,17 +8,15 @@ class EmployeeAdminForm(forms.ModelForm):
         label="Department Name",
         widget=forms.TextInput(attrs={'placeholder': 'Type department name'})
     )
-
     class Meta:
         model = Employee
-        fields = ['employee_id', 'name', 'passcode', 'is_manager', 'department_name']
+        fields = ['employee_id', 'name', 'passcode', 'is_manager', 'department_name','profile_picture']
 
     def save(self, commit=True):
-        # Fetch or create the Department instance
+
         department_name = self.cleaned_data['department_name']
         department, _ = Department.objects.get_or_create(Department_name=department_name)
 
-        # Assign the department to the Employee instance
         employee = super().save(commit=False)
         employee.department = department
         if commit:

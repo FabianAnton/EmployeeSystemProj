@@ -40,6 +40,7 @@ class Employee(AbstractBaseUser):
     is_manager = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
     archive_date = models.DateTimeField(null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True,default='profile_pictures/default.jpg')
 
     objects = EmployeeManager()
 

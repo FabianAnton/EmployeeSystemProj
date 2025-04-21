@@ -4,6 +4,10 @@ from django.contrib.auth.hashers import make_password
 from .models import Employee, Department
 from django.utils.timezone import now 
 
+def filter_view(request):
+    title_contains_query = request.GET.get('employee_id__gte')
+    return render(request, 'search.html')
+
 def login_view(request):
     if request.method == 'POST':
         employee_id = request.POST['employee_id']
@@ -84,3 +88,25 @@ def logout_view(request):
 def department_list(request):
     departments = Department.objects.prefetch_related('employees').all()
     return render(request, 'departments.html', {'departments': departments})  
+
+#advanced search bar
+def filter_view(request):
+    qs = Employee.objects.all()
+
+    title_contains_query = request.GET.get('title_contains')
+    id_exact_query = request.GET.get('id_exact')
+    
+    if title_contains_query:
+        qs = qs.filter(name__icontains=title_contains_query)
+    if id_exact_query:
+        qs = qs.filter(employee_id=id_exact_query)
+    
+    context = {
+        'queryset': qs,
+    }
+    return render(request, 'search.html', context)
+
+#employee_details
+def employee_details(request,employee_id):
+    employee = get_object_or_404(Employee, employee_id=employee_id)
+    return render(request, 'employee_detail.html', {'employee': employee})

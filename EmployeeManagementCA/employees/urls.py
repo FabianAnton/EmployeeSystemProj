@@ -12,4 +12,6 @@ urlpatterns = [
     path('employee/<str:employee_id>/', views.employee_home, name='employee_home'),
     path('logout/', views.logout_view, name='logout'),
     path('departments/',views.department_list, name='departments'),
+    path('employee_detail/<str:employee_id>/',views.employee_details, name='employee_detail'),
+    path('search/', views.filter_view, name = 'filter_search'),
 ]
