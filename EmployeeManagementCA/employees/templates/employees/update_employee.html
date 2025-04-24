@@ -141,6 +141,15 @@
                     <label for="is_manager">Manager?</label>
                 </div>
 
+                <select name="department" required>
+                    {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if dept.id == employee.department.id %}selected{% endif %}>
+                            {{ dept.Department_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+
                 <!-- Buttons Container -->
                 <div class="button-container">
                     <button type="submit" class="button submit-btn">Update Employee</button>

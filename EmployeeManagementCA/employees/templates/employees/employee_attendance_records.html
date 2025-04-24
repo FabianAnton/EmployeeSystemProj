@@ -94,6 +94,8 @@
                 </tr>
                 {% endfor %}
             </table>
+            <!-- Export per employee -->
+            <a href="{% url 'export_attendance_csv_employee' employee.employee_id %}" class="button view-btn">Export CSV</a>
         </div>
         <a href="{% url 'manager_dashboard' %}" class="back-btn">Back to Dashboard</a>
     </div>

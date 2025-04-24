@@ -1,3 +1,5 @@
+import csv
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
 from .models import Attendance
@@ -86,3 +88,30 @@ def employee_attendance_records(request, employee_id):
         'employee': employee,
         'records': records
     })
+
+def export_attendance_csv(request, employee_id=None):
+    response = HttpResponse(content_type='text/csv')
+    filename = f"attendance_{employee_id or 'all'}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Employee ID', 'Name', 'Date', 'Clock In', 'Break Start', 'Break End', 'Clock Out', 'Total Hours'])
+
+    if employee_id:
+        records = Attendance.objects.filter(employee__employee_id=employee_id)
+    else:
+        records = Attendance.objects.all()
+
+    for record in records:
+        writer.writerow([
+            record.employee.employee_id,
+            record.employee.name,
+            record.date,
+            record.clock_in_time.strftime("%Y-%m-%d %H:%M") if record.clock_in_time else '',
+            record.break_start_time.strftime("%Y-%m-%d %H:%M") if record.break_start_time else '',
+            record.break_end_time.strftime("%Y-%m-%d %H:%M") if record.break_end_time else '',
+            record.clock_out_time.strftime("%Y-%m-%d %H:%M") if record.clock_out_time else '',
+            record.total_hours()
+        ])
+
+    return response

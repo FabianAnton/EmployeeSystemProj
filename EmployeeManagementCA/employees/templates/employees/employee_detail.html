@@ -118,8 +118,34 @@
             display: flex;
             justify-content: center;
         }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;       
+            object-fit: cover;        
+            border: 3px solid #ddd;       
+        }
+
     </style>
 </head>
 <body>
-    
+    <div class="wrapper">
+        <div class="box">
+            <a href="{% url 'manager_dashboard' %}" class="back-btn">Back</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+            {% if employee.profile_picture %}
+                <img src="{{ employee.profile_picture.url }}" alt="Profile Picture" class="logo">
+            {% else %}
+                <img src="{% static 'images/default-profile.jpg' %}" alt="Default Profile" class="logo">
+            {% endif %}
+
+            <h2>{{ employee.name }}</h2>
+            <p><strong>Employee ID:</strong> {{ employee.employee_id }}</p>
+            <p><strong>Department:</strong> {{ employee.department.Department_name }}</p>
+            <p><strong>Manager:</strong> {{ employee.is_manager|yesno:"Yes,No" }}</p>
+        </div>
+    </div>
 </body>
+</html>

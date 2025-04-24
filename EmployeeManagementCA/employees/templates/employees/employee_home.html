@@ -118,6 +118,22 @@
             display: flex;
             justify-content: center;
         }
+
+        .leave-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .leave-btn:hover {
+            background-color: #2980b9;
+        }
+
     </style>
 </head>
 <body>
@@ -138,6 +154,9 @@
             
             <!-- Welcome Message -->
             <h2>Welcome, {{ employee.name }}!</h2>
+
+            <a href="{% url 'request_leave' %}" class="button leave-btn">📅 Request Leave</a>
+
 
             <!-- Clock In/Clock Out Form -->
             <div class="button-container">

@@ -14,4 +14,7 @@ urlpatterns = [
     path('departments/',views.department_list, name='departments'),
     path('employee_detail/<str:employee_id>/',views.employee_details, name='employee_detail'),
     path('search/', views.filter_view, name = 'filter_search'),
+    path('leave/request/', views.request_leave, name='request_leave'),
+    path('leave/requests/', views.view_leave_requests, name='view_leave_requests'),
+    path('leave/update/<int:request_id>/<str:action>/', views.update_leave_status, name='update_leave_status'),
 ]

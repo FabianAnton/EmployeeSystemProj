@@ -31,28 +31,37 @@
             justify-content: center;
         }
         .left-box {
-            width: 250px;
-            height: 400px;
+            width: 300px; /* Slightly wider */
+            height: auto; /* Let it grow with content */
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .clock {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .logo {
-            width: 100%;
-            max-height: 250px;
-            object-fit: contain;
-        }
         .right-box {
-            width: 500px;
-            height: 400px;
-            text-align: center;
-            overflow-y: hidden;
+            width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
             overflow-x: hidden;
+            text-align: center;
             position: relative;
+            padding-bottom: 20px;
         }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
         .logout-btn {
             position: absolute;
             top: 10px;
@@ -124,10 +133,14 @@
         .add-btn:hover {
             background-color: #27ae60;
         }
-        /* New Styles for Attendance Section */
+
         .attendance-container {
             text-align: center;
+            width: 100%;
+            max-width: 100%;
+            margin-top: 20px;
         }
+
         select {
             padding: 8px;
             font-size: 14px;
@@ -151,6 +164,38 @@
         .archive-view-btn:hover {
             background-color: #7f8c8d;
         }
+        td a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        .export-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .export-btn {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background-color: #1f618d;
+        }
+
     </style>
     <script>
         function showAttendance() {
@@ -181,6 +226,7 @@
         <div class="box right-box">
             <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
             <h2>Manager Dashboard</h2>
+            
             <!-- Attendance Records Section -->
             <div class="attendance-container">
                 <h3>View Employee Attendance</h3>
@@ -195,7 +241,11 @@
                         {% if not employee.archived %}
                         <tr>
                             <td>{{ employee.employee_id }}</td>
-                            <td>{{ employee.name }}</td>
+                            <td>
+                                <a href="{% url 'employee_detail' employee.employee_id %}">
+                                    {{ employee.name }}
+                                </a>
+                            </td>
                             <td>
                                 <a href="{% url 'update_employee' employee.employee_id %}" class="button edit-btn">Edit</a>
                                 <a href="{% url 'archive_employee' employee.employee_id %}" class="button delete-btn">Delete</a>
@@ -205,7 +255,15 @@
                         {% endif %}
                     {% endfor %}
                 </table>
+
+                <div class="export-container">
+                    <a href="{% url 'export_attendance_csv' %}" class="button export-btn">
+                        📄 Export All Attendance (CSV)
+                    </a>
+                </div>
+
             </div>
+            <a href="{% url 'view_leave_requests' %}" class="button archive-view-btn">📋 View Leave Requests</a>
             <a href="{% url 'add_employee' %}" class="button add-btn">Add Employee</a>
             <a href="{% url 'departments' %}" class="button add-btn">View Employee Departments</a>
             <a href="{% url 'archived_employees' %}" class="button archive-view-btn">View Archived Employees</a>

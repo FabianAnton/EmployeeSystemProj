@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from .models import Employee, Department
 from django.utils.timezone import now 
+from .models import LeaveRequest
+from django.contrib.auth.decorators import login_required
 
 def filter_view(request):
     title_contains_query = request.GET.get('employee_id__gte')
@@ -15,6 +17,8 @@ def login_view(request):
 
         try:
             employee = Employee.objects.get(employee_id=employee_id, passcode=passcode)
+
+            request.session['employee_id'] = employee.employee_id
 
             if employee.is_manager:
                 return redirect('manager_dashboard')
@@ -36,27 +40,45 @@ def add_employee(request):
         passcode = request.POST['passcode']
         is_manager = 'is_manager' in request.POST
         department_id = request.POST.get('department')
-        department = Department.objects.get(id=department_id) 
+        department = Department.objects.get(id=department_id)
+        profile_picture = request.FILES.get('profile_picture')
 
-        Employee.objects.create_employee(employee_id, name, passcode, is_manager, department)
-        
+        Employee.objects.create(
+            employee_id=employee_id,
+            name=name,
+            passcode=passcode,
+            is_manager=is_manager,
+            department=department,
+            profile_picture=profile_picture
+        )
+
         return redirect('manager_dashboard')
 
-    return render(request, 'employees/add_employee.html')
-
+    departments = Department.objects.all()
+    return render(request, 'employees/add_employee.html', {'departments': departments})
 
 # Update Employee
 def update_employee(request, employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
-    
+
     if request.method == 'POST':
         employee.name = request.POST['name']
         employee.passcode = request.POST['passcode']
-        employee.is_manager = 'is_manager' in request.POST  # Update manager status
+        employee.is_manager = 'is_manager' in request.POST
+        department_id = request.POST.get('department')
+        employee.department = Department.objects.get(id=department_id)
+
+        if request.FILES.get('profile_picture'):
+            employee.profile_picture = request.FILES['profile_picture'] 
+
         employee.save()
         return redirect('manager_dashboard')
 
-    return render(request, 'employees/update_employee.html', {'employee': employee})
+    departments = Department.objects.all()
+    return render(request, 'employees/update_employee.html', {
+        'employee': employee,
+        'departments': departments
+    })
 
 def archive_employee(request, employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
@@ -110,3 +132,37 @@ def filter_view(request):
 def employee_details(request,employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
     return render(request, 'employee_detail.html', {'employee': employee})
+
+def request_leave(request):
+    employee_id = request.session.get('employee_id')
+    if not employee_id:
+        return redirect('login') 
+
+    employee = Employee.objects.get(employee_id=employee_id)
+
+    if request.method == 'POST':
+        start = request.POST['start_date']
+        end = request.POST['end_date']
+        reason = request.POST['reason']
+
+        LeaveRequest.objects.create(
+            employee=employee,
+            start_date=start,
+            end_date=end,
+            reason=reason
+        )
+        return redirect('employee_home', employee_id=employee.employee_id)
+
+    return render(request, 'employees/request_leave.html')
+
+
+
+def view_leave_requests(request):
+    requests = LeaveRequest.objects.select_related('employee').order_by('-requested_at')
+    return render(request, 'employees/view_leave_requests.html', {'leave_requests': requests})
+
+def update_leave_status(request, request_id, action):
+    leave = LeaveRequest.objects.get(id=request_id)
+    leave.status = 'Approved' if action == 'approve' else 'Rejected'
+    leave.save()
+    return redirect('view_leave_requests')

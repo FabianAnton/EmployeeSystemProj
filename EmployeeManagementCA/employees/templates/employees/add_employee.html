@@ -127,12 +127,18 @@
         <!-- Right Side: Add Employee Form -->
         <div class="box right-box">
             <h2>Add Employee</h2>
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <label for="profile_picture">Profile Picture:</label>
+                <input type="file" name="profile_picture" accept="image/*">
                 <input type="text" name="employee_id" placeholder="Employee ID" required>
                 <input type="text" name="name" placeholder="Employee Name" required>
                 <input type="text" name="passcode" placeholder="Passcode (6 Digits)" required>
-                <input type="text" name="Department" placeholder="Department name" required>
+                <select name="department" required>
+                    {% for dept in departments %}
+                        <option value="{{ dept.id }}">{{ dept.Department_name }}</option>
+                    {% endfor %}
+                </select>
                 <div class="checkbox-container">
                     <label> <input type="checkbox" name="is_manager"> Manager? </label>
                 </div>
