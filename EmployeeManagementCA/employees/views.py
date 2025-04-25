@@ -98,7 +98,7 @@ def unarchive_employee(request, employee_id):
     employee.archived = False
     employee.archive_date = None  # Clear the archive timestamp
     employee.save()
-    return redirect('view_archived_employees')
+    return redirect('manager_dashboard')
 
 # Delete Employee
 def delete_employee(request, employee_id):
