@@ -69,7 +69,10 @@
             <tr>
                 <td>{{ employee.employee_id }}</td>
                 <td>{{ employee.name }}</td>
-                <td>{{ employee.archive_date|date:"Y-m-d H:i" }}</td> <!-- Display archive timestamp -->
+                <td>
+                    {{ employee.archive_date|date:"Y-m-d H:i" }}
+                    <a href="{% url 'unarchive_employee' employee.employee_id %}" class="back-btn">Unarchive</a>
+                </td> <!-- Displays archive timestamp & unarchive button -->
             </tr>
             {% empty %}
             <tr>

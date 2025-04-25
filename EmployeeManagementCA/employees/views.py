@@ -92,6 +92,14 @@ def view_archived_employees(request):
     archived_employees = Employee.objects.filter(archived=True)
     return render(request, 'archived_employees.html', {'archived_employees': archived_employees})
 
+def unarchive_employee(request, employee_id):
+    """Unarchives an employee and restores them to the active list"""
+    employee = get_object_or_404(Employee, employee_id=employee_id, archived=True)
+    employee.archived = False
+    employee.archive_date = None  # Clear the archive timestamp
+    employee.save()
+    return redirect('view_archived_employees')
+
 # Delete Employee
 def delete_employee(request, employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
