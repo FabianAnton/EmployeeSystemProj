@@ -119,8 +119,6 @@
     </style>
 </head>
 <body>
-    <!-- Back Button -->
-    <a href="javascript:window.history.back();" class="back-btn">← Back</a>
     <div class="wrapper">
         <!-- Left Side: Logo -->
         <div class="box left-box">
@@ -130,30 +128,32 @@
         <!-- Right Side: Update Employee Form -->
         <div class="box right-box">
             <h2>Update Employee</h2>
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="source" value="{{ source }}">
                 <input type="text" name="name" value="{{ employee.name }}" required>
                 <input type="text" name="passcode" value="{{ employee.passcode }}" required>
 
                 <!-- Manager Checkbox (inline with text) -->
-                <div class="checkbox-container">
-                    <input type="checkbox" id="is_manager" name="is_manager" {% if employee.is_manager %}checked{% endif %}>
-                    <label for="is_manager">Manager?</label>
-                </div>
+                {% if logged_in_is_manager %}
+                    <select name="department" required>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}" {% if dept.id == employee.department.id %}selected{% endif %}>
+                                {{ dept.Department_name }}
+                             </option>
+                        {% endfor %}
+                    </select>
 
-                <select name="department" required>
-                    {% for dept in departments %}
-                        <option value="{{ dept.id }}" {% if dept.id == employee.department.id %}selected{% endif %}>
-                            {{ dept.Department_name }}
-                        </option>
-                    {% endfor %}
-                </select>
-                
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="is_manager" name="is_manager" {% if employee.is_manager %}checked{% endif %}>
+                        <label for="is_manager">Manager?</label>
+                    </div>
+                {% endif %}
 
                 <!-- Buttons Container -->
                 <div class="button-container">
-                    <button type="submit" class="button submit-btn">Update Employee</button>
-                    <a href="{% url 'manager_dashboard' %}" class="button cancel-btn">Cancel</a>
+                    <button type="submit" class="button submit-btn">Update</button>
+                    <a href="{% if source == 'employee_home' %}{% url 'employee_home' employee.employee_id %}{% else %}{% url 'manager_dashboard' %}{% endif %}" class="button cancel-btn">Cancel</a>
                 </div>
             </form>
         </div>

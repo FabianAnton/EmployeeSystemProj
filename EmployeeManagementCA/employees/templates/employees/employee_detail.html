@@ -30,42 +30,17 @@
             text-align: center;
             position: relative;
         }
-        .clock {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .logo {
-            width: auto;
-            height: 250px;
-            margin-bottom: 10px;
-        }
         h2 {
             color: #333;
             font-size: 22px;
         }
-        .logout-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #e74c3c;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .logout-btn:hover {
-            background-color: #c0392b;
-        }
         .back-btn {
-            position: absolute;
             top: 10px;
             left: 10px;
             background-color: #ccc;
             color: black;
             padding: 8px 15px;
+            margin: 5px;
             border-radius: 5px;
             text-decoration: none;
             font-size: 14px;
@@ -74,78 +49,62 @@
         .back-btn:hover {
             background-color: #bbb;
         }
-        /* General button styles */
-        .clock-btn {
-            flex: 1; /* Ensures both buttons are equal size */
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            background-color: #f4f4f4;
-            transition: background-color 0.2s ease-in-out;
-            width: 100%; /* Ensure buttons take full width */
-        }
-
-        .clock-btn:hover {
-            background-color: #ddd;
-        }
-
         /* Center the entire button container */
         .button-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
             max-width: 280px;
             margin: 20px auto;
         }
-
-        /* Center the row of Break & Clock Out buttons */
-        .button-row {
-            display: flex;
-            justify-content: center; /* Ensures buttons stay centered */
-            align-items: center;
-            width: 100%;
-            gap: 10px;
+        .info {
+            text-align: center;
+            margin-top: 10px;
         }
-
-        /* Ensures forms take up equal space */
-        .button-row form {
-            width: 50%;
-            display: flex;
-            justify-content: center;
+        .info p {
+            margin: 5px 0;
+            font-size: 16px;
         }
-
-        .logo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;       
-            object-fit: cover;        
-            border: 3px solid #ddd;       
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px auto;
         }
-
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="box">
-            <a href="{% url 'manager_dashboard' %}" class="back-btn">Back</a>
-            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    <div class="profile-card">
+        {% if employee.profile_picture %}
+            <img src="{{ employee.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+        <img src="{% static 'images/default.jpg' %}" alt="Default profile picture" class="profile-picture">
+        {% endif %}
 
-            {% if employee.profile_picture %}
-                <img src="{{ employee.profile_picture.url }}" alt="Profile Picture" class="logo">
-            {% else %}
-                <img src="{% static 'images/default.jpg' %}" alt="Default Profile" class="logo">
-            {% endif %}
+        <h2>{{ employee.name }}</h2>
+            <div class="info"> 
+                <p><strong>Employee ID:</strong> {{ employee.employee_id }}</p>
+                <p><strong>Department:</strong> {{ employee.department.Department_name }}</p>
+                <p><strong>Manager:</strong> {{ employee.is_manager|yesno:"Yes,No" }}</p>
+            </div>
 
-            <h2>{{ employee.name }}</h2>
-            <p><strong>Employee ID:</strong> {{ employee.employee_id }}</p>
-            <p><strong>Department:</strong> {{ employee.department.Department_name }}</p>
-            <p><strong>Manager:</strong> {{ employee.is_manager|yesno:"Yes,No" }}</p>
-        </div>
+        <div class="button-container">
+            <a href="{% url 'update_employee' employee.employee_id %}?source={{ source }}" class="back-btn">Edit Profile</a>
+            <a href="{% if source == 'employee_home' %}{% url 'employee_home' employee.employee_id %}{% else %}{% url 'manager_dashboard' %}{% endif %}" class="back-btn">Back</a>
+
+        </div>     
     </div>
 </body>
 </html>
