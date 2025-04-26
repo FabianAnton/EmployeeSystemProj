@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from .models import LeaveRequest
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
+import random
 
 def filter_view(request):
     title_contains_query = request.GET.get('employee_id__gte')
@@ -36,7 +37,12 @@ def manager_dashboard(request):
 
 def add_employee(request):
     if request.method == 'POST':
-        employee_id = request.POST['employee_id']
+        # Generate a unique employee ID that doesn't already exist in the database
+        while True:
+            employee_id = str(random.randint(100000, 999999))
+            if not Employee.objects.filter(employee_id=employee_id).exists():
+                break
+
         name = request.POST['name']
         passcode = request.POST['passcode']
         is_manager = 'is_manager' in request.POST
