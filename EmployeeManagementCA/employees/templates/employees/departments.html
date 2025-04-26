@@ -16,11 +16,14 @@
             height: 100vh;
             margin: 0;
         }
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+            width: 80%;
+            max-width: 600px;
         }
         .box {
             background: white;
@@ -76,7 +79,7 @@
         .back-btn:hover {
             background-color: #bbb;
         }
-        .archive-view-btn {
+        .department-view-btn {
             display: inline-block;
             margin: 10px auto;
             background-color: #3498db;
@@ -86,22 +89,28 @@
             text-decoration: none;
             font-size: 14px;
         }
-        .archive-view-btn:hover {
+        .department-view-btn:hover {
             background-color: #2980b9;
         }
-        ul {
-            padding-left: 0;
-            list-style: none;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
-        li {
-            margin-bottom: 5px;
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
         }
-
+        th {
+            background-color: #3498db;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="box">
+    <div class="container">
+        <div>
             <!-- Top Buttons -->
             <a href="javascript:window.history.back();" class="back-btn">← Back</a>
             <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
@@ -112,19 +121,31 @@
             <!-- Logo -->
             <img src="{% static 'images/logo.jpg' %}" alt="Company Logo" class="logo">
 
-            <!-- Link to Search -->
-            <a href="{% url 'filter_search' %}" class="archive-view-btn">Search for an Employee</a>
-
             <!-- Department Listing -->
             <h1>Departments</h1>
-            {% for department in departments %}
-                <h2>{{ department.Department_name }}</h2>
-                <ul>
+            <table>
+                <tr>
+                    <th>Department Name</th>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                </tr>
+                {% for department in departments %}
                     {% for employee in department.employees.all %}
-                        <li>{{ employee.name }}</li>
+                        <tr>
+                            <td>{{ department.Department_name }}</td>
+                            <td>{{ employee.employee_id }}</td>
+                            <td>{{ employee.name }}</td>
+                        </tr>
                     {% endfor %}
-                </ul>
-            {% endfor %}
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No departments available</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <!-- Link to Search -->
+            <a href="{% url 'filter_search' %}" class="department-view-btn">Search for an Employee</a>
         </div>
     </div>
 

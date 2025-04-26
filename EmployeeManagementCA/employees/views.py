@@ -5,6 +5,7 @@ from .models import Employee, Department
 from django.utils.timezone import now 
 from .models import LeaveRequest
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 
 def filter_view(request):
     title_contains_query = request.GET.get('employee_id__gte')
@@ -116,7 +117,8 @@ def logout_view(request):
 
 #department view
 def department_list(request):
-    departments = Department.objects.prefetch_related('employees').all()
+    departments = Department.objects.prefetch_related(
+        Prefetch('employees', queryset=Employee.objects.filter(archived=False))).all()
     return render(request, 'departments.html', {'departments': departments})  
 
 #advanced search bar
