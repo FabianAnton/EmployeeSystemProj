@@ -69,23 +69,42 @@ def add_employee(request):
 def update_employee(request, employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
 
+    # Check if the logged-in user is a manager
+    current_employee_id = request.session.get('employee_id')
+    current_employee = Employee.objects.get(employee_id=current_employee_id)
+    logged_in_is_manager = current_employee.is_manager
+
+    if not logged_in_is_manager and employee.employee_id != current_employee_id:
+        return redirect('employee_home', employee_id=current_employee_id)
+
     if request.method == 'POST':
+        source = request.POST.get('source', 'manager_dashboard')
         employee.name = request.POST['name']
         employee.passcode = request.POST['passcode']
-        employee.is_manager = 'is_manager' in request.POST
-        department_id = request.POST.get('department')
-        employee.department = Department.objects.get(id=department_id)
+
+        if logged_in_is_manager:
+            department_id = request.POST.get('department')
+            employee.department = Department.objects.get(id=department_id)
+            employee.is_manager = 'is_manager' in request.POST
 
         if request.FILES.get('profile_picture'):
             employee.profile_picture = request.FILES['profile_picture'] 
 
         employee.save()
-        return redirect('manager_dashboard')
+
+        if source == 'employee_home':
+            return redirect('employee_home', employee_id=employee.employee_id)
+        else:
+            return redirect('manager_dashboard')
+    else:
+        source = request.GET.get('source', 'manager_dashboard')
 
     departments = Department.objects.all()
     return render(request, 'employees/update_employee.html', {
         'employee': employee,
-        'departments': departments
+        'departments': departments,
+        'source': source,
+        'logged_in_is_manager': logged_in_is_manager,
     })
 
 def archive_employee(request, employee_id):
@@ -148,14 +167,18 @@ def filter_view(request):
 #employee_details
 def employee_details(request,employee_id):
     employee = get_object_or_404(Employee, employee_id=employee_id)
-    return render(request, 'employee_detail.html', {'employee': employee})
+    source = request.GET.get('source')
+    return render(request, 'employee_detail.html', {
+        'employee': employee,
+        'source': source,
+    })
 
 def request_leave(request):
     employee_id = request.session.get('employee_id')
     if not employee_id:
         return redirect('login') 
 
-    employee = Employee.objects.get(employee_id=employee_id)
+    employee = get_object_or_404(Employee, employee_id=employee_id)
 
     if request.method == 'POST':
         start = request.POST['start_date']
@@ -170,7 +193,7 @@ def request_leave(request):
         )
         return redirect('employee_home', employee_id=employee.employee_id)
 
-    return render(request, 'employees/request_leave.html')
+    return render(request, 'employees/request_leave.html', {'employee': employee})
 
 
 

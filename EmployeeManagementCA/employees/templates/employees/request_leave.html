@@ -31,6 +31,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            gap: 10px;
+        }
         button {
             background-color: #3498db;
             color: white;
@@ -39,6 +45,19 @@
         }
         button:hover {
             background-color: #2980b9;
+        }
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #3498db;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .back-btn:hover {
+            background-color: #bbb;
         }
     </style>
 </head>
@@ -52,7 +71,11 @@
         <input type="date" name="end_date" required>
         <label>Reason:</label>
         <textarea name="reason" rows="3" required></textarea>
-        <button type="submit">Submit</button>
+
+        <div class="button-row">
+            <button type="submit">Submit</button>
+            <a href="{% url 'employee_home' employee.employee_id %}" class="back-btn">Back</a>
+        </div>
     </form>
 </body>
 </html>
