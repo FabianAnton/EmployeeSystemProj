@@ -49,8 +49,8 @@
         }
         .back-btn {
             display: inline-block;
-            background-color: #ccc;
-            color: black;
+            background-color: #3498db;
+            color: white;
             padding: 8px 15px;
             border-radius: 5px;
             text-decoration: none;
@@ -81,14 +81,8 @@
 
             <form method="GET" action=".">
                 <div class="form-group mb-3">
-                    <label for="titleContains">Employee Name</label>
-                    <input type="text" id="titleContains" name="title_contains" class="form-control" placeholder="Search by name">
+                    <input type="text" id="search_query" name="search_query" class="form-control" placeholder="Search by Name or ID">
                 </div>
-                <div class="form-group mb-3">
-                    <label for="idExact">Employee ID</label>
-                    <input type="text" id="idExact" name="id_exact" class="form-control" placeholder="Search by ID">
-                </div>
-                <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
             <div class="search-result">

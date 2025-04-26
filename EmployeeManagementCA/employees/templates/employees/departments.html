@@ -111,10 +111,6 @@
 <body>
     <div class="container">
         <div>
-            <!-- Top Buttons -->
-            <a href="javascript:window.history.back();" class="back-btn">← Back</a>
-            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
-
             <!-- Live Clock -->
             <div class="clock" id="clock">00:00:00</div>
 
@@ -146,6 +142,8 @@
 
             <!-- Link to Search -->
             <a href="{% url 'filter_search' %}" class="department-view-btn">Search for an Employee</a>
+            <a href="{% url 'manager_dashboard' %}" class="department-view-btn">Back to Dashboard</a>
+
         </div>
     </div>
 

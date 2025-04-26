@@ -6,8 +6,20 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
             padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 80%;
         }
         h2 {
             text-align: center;
@@ -19,7 +31,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         th, td {
-            padding: 12px;
+            padding: 20px;
             border-bottom: 1px solid #ddd;
             text-align: center;
         }
@@ -45,34 +57,48 @@
         .reject-btn {
             background-color: #e74c3c;
         }
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #3498db;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .back-btn:hover {
+            background-color: #bbb;
+        }
     </style>
 </head>
 <body>
-    <h2>All Leave Requests</h2>
-    <table>
-        <tr>
-            <th>Employee</th>
-            <th>Date Range</th>
-            <th>Reason</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        {% for request in leave_requests %}
-        <tr>
-            <td>{{ request.employee.name }}</td>
-            <td>{{ request.start_date }} to {{ request.end_date }}</td>
-            <td>{{ request.reason }}</td>
-            <td class="status">{{ request.status }}</td>
-            <td>
-                {% if request.status == "Pending" %}
-                    <a href="{% url 'update_leave_status' request.id 'approve' %}" class="approve-btn">Approve</a>
-                    <a href="{% url 'update_leave_status' request.id 'reject' %}" class="reject-btn">Reject</a>
-                {% else %}
-                    —
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>All Leave Requests</h2>
+        <table>
+            <tr>
+                <th>Employee</th>
+                <th>Date Range</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for request in leave_requests %}
+            <tr>
+                <td>{{ request.employee.name }}</td>
+                <td>{{ request.start_date }} to {{ request.end_date }}</td>
+                <td>{{ request.reason }}</td>
+                <td class="status">{{ request.status }}</td>
+                <td>
+                    {% if request.status == "Pending" %}
+                        <a href="{% url 'update_leave_status' request.id 'approve' %}" class="approve-btn">Approve</a>
+                        <a href="{% url 'update_leave_status' request.id 'reject' %}" class="reject-btn">Reject</a>
+                    {% else %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{% url 'manager_dashboard' %}" class="back-btn">Back to Dashboard</a>
+    </div>
 </body>
 </html>

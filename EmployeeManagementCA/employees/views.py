@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from .models import LeaveRequest
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
+from django.db import models
 import random
 
 def filter_view(request):
@@ -131,13 +132,13 @@ def department_list(request):
 def filter_view(request):
     qs = Employee.objects.filter(archived=False)
 
-    title_contains_query = request.GET.get('title_contains')
-    id_exact_query = request.GET.get('id_exact')
+    search_query = request.GET.get('search_query')
     
-    if title_contains_query:
-        qs = qs.filter(name__icontains=title_contains_query)
-    if id_exact_query:
-        qs = qs.filter(employee_id=id_exact_query)
+    if search_query:
+        qs = qs.filter(
+            models.Q(name__icontains=search_query)
+            | models.Q(employee_id__icontains=search_query)
+        )
     
     context = {
         'queryset': qs,
