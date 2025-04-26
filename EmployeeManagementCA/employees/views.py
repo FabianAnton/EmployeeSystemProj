@@ -129,7 +129,7 @@ def department_list(request):
 
 #advanced search bar
 def filter_view(request):
-    qs = Employee.objects.all()
+    qs = Employee.objects.filter(archived=False)
 
     title_contains_query = request.GET.get('title_contains')
     id_exact_query = request.GET.get('id_exact')
