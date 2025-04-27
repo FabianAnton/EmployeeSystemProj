@@ -16,7 +16,7 @@ class EmployeeManager(BaseUserManager):
             name=name,
             passcode=passcode,
             is_manager=is_manager,
-            department=department  # ✅ Now accepts department
+            department=department  
         )
         employee.save(using=self._db)
         return employee

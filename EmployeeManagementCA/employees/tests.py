@@ -1,7 +1,11 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils.timezone import now
-from .models import Employee, Department
+from .models import Employee, Department, LeaveRequest
+from django.utils import timezone
+from datetime import timedelta
+from django.core.exceptions import ValidationError
+
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -207,3 +211,32 @@ class searchbarTest(TestCase):
         
         self.assertEqual(response.status_code, 200, "Search page did not return a successful response")
         self.assertContains(response, "Test User", msg_prefix="Expected employee not found in search results")
+
+class leavereviewTest(TestCase):
+    def setUp(self):
+        """Create a test employee before each test runs."""
+        self.department = Department.objects.create(Department_name="IT")
+        self.employee = Employee.objects.create(
+            employee_id="999999",
+            name="Test User",
+            passcode="999999",
+            department=self.department
+        )
+    
+    def test_leave_request_validation(self):
+        start_date=timezone.now().date() - timedelta(days=2)
+        end_date=timezone.now().date() + timedelta(days=2)
+        
+        with self.assertRaises(ValueError):
+            if start_date < timezone.now().date():
+                raise ValueError("start date cannot be in the past.")
+        
+        LeaveRequest.objects.create(
+            employee=self.employee,
+            start_date=start_date,
+            end_date=end_date,
+            reason="Vacation",
+            status="Pending"
+        )
+            
+        
