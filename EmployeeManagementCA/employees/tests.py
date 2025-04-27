@@ -188,3 +188,22 @@ class ArchiveEmployeeTest(TestCase):
         employee = Employee.objects.get(employee_id="999999")
         self.assertTrue(employee.archived)
         self.assertIsNotNone(employee.archive_date)
+
+
+
+class searchbarTest(TestCase):
+    def setUp(self):
+        
+        self.department = Department.objects.create(Department_name="IT")
+        self.employee = Employee.objects.create(
+            employee_id="999999",
+            name="Test User",
+            passcode="999999",
+            department=self.department
+        )
+
+    def test_employee_search(self):
+        response = self.client.get(reverse("filter_search"), {"q": "Test"}) 
+        
+        self.assertEqual(response.status_code, 200, "Search page did not return a successful response")
+        self.assertContains(response, "Test User", msg_prefix="Expected employee not found in search results")
