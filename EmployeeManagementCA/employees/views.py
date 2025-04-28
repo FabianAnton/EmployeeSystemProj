@@ -204,5 +204,18 @@ def view_leave_requests(request):
 def update_leave_status(request, request_id, action):
     leave = LeaveRequest.objects.get(id=request_id)
     leave.status = 'Approved' if action == 'approve' else 'Rejected'
+    leave.seen_by_employee = False
     leave.save()
     return redirect('view_leave_requests')
+
+def employee_notifications(request, employee_id):
+    employee = get_object_or_404(Employee, employee_id=employee_id)
+    qs = LeaveRequest.objects.filter(employee=employee, status__in=['Pending','Approved','Rejected'], seen_by_employee=False).order_by('-requested_at')
+    notifications = list(qs)
+    
+    qs.update(seen_by_employee=True)
+
+    return render(request, 'employees/employee_notifications.html', {
+        'employee': employee,
+        'notifications': notifications,
+    })

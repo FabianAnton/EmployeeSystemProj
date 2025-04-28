@@ -18,4 +18,5 @@ urlpatterns = [
     path('leave/request/', views.request_leave, name='request_leave'),
     path('leave/requests/', views.view_leave_requests, name='view_leave_requests'),
     path('leave/update/<int:request_id>/<str:action>/', views.update_leave_status, name='update_leave_status'),
+    path('notifications/<str:employee_id>/', views.employee_notifications, name='employee_notifications'),
 ]

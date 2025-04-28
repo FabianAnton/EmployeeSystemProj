@@ -65,6 +65,8 @@ class LeaveRequest(models.Model):
     reason = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     requested_at = models.DateTimeField(default=timezone.now)
+    seen_by_manager = models.BooleanField(default=False)
+    seen_by_employee = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.employee.name} ({self.start_date} - {self.end_date})"
