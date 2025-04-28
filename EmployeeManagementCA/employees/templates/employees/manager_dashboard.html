@@ -247,7 +247,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{% url 'update_employee' employee.employee_id %}" class="button edit-btn">Edit</a>
+                                <a href="{% url 'update_employee' employee.employee_id %}?source=manager_dashboard" class="button edit-btn">Edit</a>
                                 <a href="{% url 'archive_employee' employee.employee_id %}" class="button delete-btn">Delete</a>
                                 <a href="{% url 'employee_attendance_records' employee.employee_id %}" class="button view-btn">View Attendance</a>
                             </td>

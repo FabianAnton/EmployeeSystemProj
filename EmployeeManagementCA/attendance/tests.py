@@ -1,11 +1,16 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.utils.timezone import make_aware
-from datetime import datetime
-from employees.models import Employee, Department
-from .models import Attendance
 from django.urls import reverse
 
+from employees.models import Employee, Department
+from .models import Attendance
+
+
 class AttendanceHoursTest(TestCase):
+    """Tests the calculation of total working hours excluding breaks."""
+
     def setUp(self):
         self.department = Department.objects.create(Department_name="Test Dept")
         self.emp = Employee.objects.create(
@@ -23,10 +28,13 @@ class AttendanceHoursTest(TestCase):
         )
 
     def test_total_hours(self):
+        """Test that total_hours correctly calculates 8 working hours."""
         self.assertEqual(self.attendance.total_hours(), "08:00")
 
 
 class AttendanceViewTest(TestCase):
+    """Tests rendering of employee attendance records view."""
+
     def setUp(self):
         self.department = Department.objects.create(Department_name="Test Dept")
         self.emp = Employee.objects.create(
@@ -36,6 +44,7 @@ class AttendanceViewTest(TestCase):
         )
 
     def test_attendance_page_renders(self):
+        """Test that the attendance records page loads correctly."""
         url = reverse('employee_attendance_records', args=[self.emp.employee_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

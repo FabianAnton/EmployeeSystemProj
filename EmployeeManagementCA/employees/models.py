@@ -2,12 +2,21 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+
+# -------------------------------
+# Department Model
+# -------------------------------
+
 class Department(models.Model):
     Department_name = models.CharField(max_length=100, default='General')
-    
+
     def __str__(self):
         return self.Department_name
 
+
+# -------------------------------
+# Employee Manager
+# -------------------------------
 
 class EmployeeManager(BaseUserManager):
     def create_employee(self, employee_id, name, passcode, is_manager=False, department=None):
@@ -16,7 +25,7 @@ class EmployeeManager(BaseUserManager):
             name=name,
             passcode=passcode,
             is_manager=is_manager,
-            department=department  
+            department=department
         )
         employee.save(using=self._db)
         return employee
@@ -26,6 +35,10 @@ class EmployeeManager(BaseUserManager):
             employee_id, name, passcode, is_manager=True, department=department
         )
 
+
+# -------------------------------
+# Employee Model
+# -------------------------------
 
 class Employee(AbstractBaseUser):
     employee_id = models.CharField(max_length=6, unique=True)
@@ -41,7 +54,12 @@ class Employee(AbstractBaseUser):
     is_manager = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
     archive_date = models.DateTimeField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True,default='profile_pictures/default.jpg')
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+        default='profile_pictures/default.jpg'
+    )
 
     objects = EmployeeManager()
 
@@ -52,6 +70,10 @@ class Employee(AbstractBaseUser):
         return self.name
 
 
+# -------------------------------
+# Leave Request Model
+# -------------------------------
+
 class LeaveRequest(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -59,7 +81,11 @@ class LeaveRequest(models.Model):
         ('Rejected', 'Rejected'),
     ]
 
-    employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='leave_requests')
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        related_name='leave_requests'
+    )
     start_date = models.DateField()
     end_date = models.DateField()
     reason = models.TextField()

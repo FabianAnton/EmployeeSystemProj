@@ -133,6 +133,7 @@
                 <input type="hidden" name="source" value="{{ source }}">
                 <input type="text" name="name" value="{{ employee.name }}" required>
                 <input type="text" name="passcode" value="{{ employee.passcode }}" required>
+                <input type="file" name="profile_picture" accept="image/*">
 
                 <!-- Manager Checkbox (inline with text) -->
                 {% if logged_in_is_manager %}
