@@ -155,9 +155,9 @@
             <!-- Welcome Message -->
             <h2>Welcome, {{ employee.name }}!</h2>
 
-            <a href="{% url 'request_leave' %}" class="button leave-btn">📅 Request Leave</a>
-
-            <a href="{% url 'employee_detail' employee.employee_id %}?source=employee_home" class="button leave-btn" style="background-color: #2ecc71;">👤 View Profile</a>
+            <a href="{% url 'request_leave' %}" class="button leave-btn"> Request Leave</a>
+            <a href="{% url 'employee_notifications' employee.employee_id %}" class="button leave-btn"> Notifications</a>
+            <a href="{% url 'employee_detail' employee.employee_id %}?source=employee_home" class="button leave-btn" style="background-color: #2ecc71;"> View Profile</a>
 
 
 
